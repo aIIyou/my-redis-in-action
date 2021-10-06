@@ -16,14 +16,16 @@ func main() {
 		DB:       0,
 	})
 	ctx := context.Background()
+	t0 := time.Now()
 	statuCmd := rdb.Ping(ctx)
 	statu, err := statuCmd.Result()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	fmt.Println(time.Since(t0))
 	fmt.Println(statu)
 
-	t0 := time.Now()
+	t0 = time.Now()
 	rdb.Set(ctx, "benchmark", "one", time.Minute)
 	rdb.Set(ctx, "benchmark", "two", time.Minute)
 	rdb.Set(ctx, "benchmark", "three", time.Minute)
@@ -42,6 +44,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	pipe.Exec(ctx)
 	fmt.Println(time.Since(t0)) //21.445µs
 
 }
